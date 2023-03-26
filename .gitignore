@@ -1,0 +1,7 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+node_modules
+
+https://leoantony20025:Leo%2020025@github.com/leoantony20025/UVBS_server.git
