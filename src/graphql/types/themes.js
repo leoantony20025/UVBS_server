@@ -42,7 +42,7 @@ export const addVideo = extendType({
                 videoUrl: nonNull(stringArg()),
             },
             async resolve(_root, args) {
-                return await prisma.user.create({
+                return await prisma.video.create({
                     data: {
                         title: args.title,
                         description: args.description,
