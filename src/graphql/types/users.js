@@ -51,3 +51,28 @@ export const signup = extendType({
         })
     }
 })
+
+
+export const login = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("login", {
+            type: "User",
+            args: {
+                email: nonNull(stringArg()),
+                password: nonNull(stringArg()),
+            },
+            async resolve(_root, args) {
+                const user = await prisma.user.findUniqueOrThrow({
+                    where: {
+                        email: args.email
+                    }
+                })
+
+                if (user?.password === args.password) {
+                    return user
+                }
+            }
+        })
+    }
+})

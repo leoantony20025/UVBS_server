@@ -9,6 +9,7 @@ scalar DateTime
 
 type Mutation {
   addVideo(description: String!, thumbnail: String!, title: String!, videoUrl: String!): Video
+  login(email: String!, password: String!): User
   signup(email: String!, name: String!, password: String!): User
 }
 
