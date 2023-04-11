@@ -1,3 +1,5 @@
-export * from "./users.js";
-export * from "./themes.js";
+export * from "./user.js";
+export * from "./video.js";
+export * from "./comment.js";
+
 

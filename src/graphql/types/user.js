@@ -1,5 +1,6 @@
 import { extendType, nonNull, objectType, stringArg } from "nexus";
 import { PrismaClient } from "@prisma/client";
+import { GraphQLError } from "graphql";
 
 
 const prisma = new PrismaClient();
@@ -40,13 +41,25 @@ export const signup = extendType({
                 password: nonNull(stringArg()),
             },
             async resolve(_root, args) {
-                return await prisma.user.create({
-                    data: {
-                        name: args.name,
-                        email: args.email,
-                        password: args.password
+                const existingUser = await prisma.user.findUnique({
+                    where: {
+                        email: args.email
                     }
                 })
+
+                if (existingUser) {
+                    return new GraphQLError("Email already exists!")
+                }
+                else {
+                    return await prisma.user.create({
+                        data: {
+                            name: args.name,
+                            email: args.email,
+                            password: args.password
+                        }
+                    })
+                }
+                
             }
         })
     }
@@ -68,6 +81,10 @@ export const login = extendType({
                         email: args.email
                     }
                 })
+
+                if (user?.password !== args.password) {
+                    return new GraphQLError("Invalid credentials!")
+                }
 
                 if (user?.password === args.password) {
                     return user
