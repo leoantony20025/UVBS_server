@@ -2,13 +2,50 @@
 ### Do not make changes to this file directly
 
 
+type Audio {
+  audioUrl: String
+  createdAt: DateTime
+  description: String
+  id: String
+  language: String
+  song: Boolean
+  thumbnail: String
+  title: String
+  updatedAt: DateTime
+}
+
+type Cart {
+  createdAt: DateTime
+  id: String
+  price: Int
+  products: [CartProduct]
+  updatedAt: DateTime
+  user: User
+  userId: String
+}
+
+type CartProduct {
+  cart: Cart
+  cartId: String
+  createdAt: DateTime
+  id: String
+  product: Product
+  productId: String
+  quantity: Int
+  updatedAt: DateTime
+  user: User
+  userId: String
+}
+
 type Comment {
   createdAt: DateTime
   id: String
   msg: String
   updatedAt: DateTime
   user: User
+  userId: String
   video: Video
+  videoId: String
 }
 
 """
@@ -16,26 +53,122 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Like {
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
+  user: User
+  userId: String
+  video: Video
+  videoId: String
+}
+
 type Mutation {
+  addAudio(audioUrl: String!, description: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
   addComment(msg: String!, userId: String!, videoId: String!): [Video]
-  addLike(videoId: String!): Video
-  addVideo(description: String!, thumbnail: String!, title: String!, videoUrl: String!): Video
+  addLike(userId: String!, videoId: String!): [Video]
+  addProduct(description: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
+  addToCartProduct(cartId: String!, productId: String!, quantity: Int!, userId: String!): User
+  addVideo(description: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
+  createCODOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, state: String!, userId: String!, zip: Int!): User
+  createCart(userId: String!): Cart
+  deleteAudio(id: String!): [Audio]
+  deleteProduct(id: String!): [Product]
+  deleteVideo(id: String!): [Video]
   login(email: String!, password: String!): User
-  signup(email: String!, name: String!, password: String!): User
+  removeAllLikes: [Video]
+  removeFromCartProduct(cartProductId: String!, userId: String!): User
+  removeLike(userId: String!, videoId: String!): [Video]
+  signup(email: String!, name: String!, password: String!, phone: String!): User
+  updateAudio(audioUrl: String!, description: String!, id: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
+  updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
+  updateUser(email: String!, id: String!, name: String!, password: String!, phone: String!): User
+  updateVideo(description: String!, id: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
+  upsertShipping(city: String!, country: String!, line1: String!, line2: String!, state: String!, userId: String!, zip: Int!): User
+}
+
+type Order {
+  city: String
+  country: String
+  createdAt: DateTime
+  id: String
+  line1: String
+  line2: String
+  payment_mode: String
+  payment_status: String
+  price: Int
+  products: String
+  razorpay_order_id: String
+  razorpay_payment_id: String
+  razorpay_signature: String
+  razorpay_temp_order_id: String
+  state: String
+  status: String
+  updatedAt: DateTime
+  user: User
+  zip: Int
+}
+
+type OrderProduct {
+  createdAt: DateTime
+  id: String
+  order: Order
+  orderId: String
+  product: Product
+  productId: String
+  quantity: Int
+  updatedAt: DateTime
+  user: User
+  userId: String
+}
+
+type Product {
+  createdAt: DateTime
+  description: String
+  id: String
+  name: String
+  photo: String
+  price: Int
+  stock: Int
+  updatedAt: DateTime
 }
 
 type Query {
+  allAudios: [Audio]
+  allCartProducts: [CartProduct]
+  allCarts: [Cart]
   allComments: [Comment]
+  allLikes: [Like]
+  allOrders: [Order]
+  allProducts: [Product]
+  allShipping: [Shipping]
   allUsers: [User]
   allVideos: [Video]
 }
 
+type Shipping {
+  city: String
+  country: String
+  createdAt: DateTime
+  id: String
+  line1: String
+  line2: String
+  state: String
+  updatedAt: DateTime
+  user: User
+  zip: Int
+}
+
 type User {
+  cart: Cart
   createdAt: DateTime
   email: String
   id: String
   name: String
+  orders: [Order]
   password: String
+  phone: String
+  shipping: Shipping
   updatedAt: DateTime
 }
 
@@ -44,7 +177,8 @@ type Video {
   createdAt: DateTime
   description: String
   id: String
-  likes: Int
+  likes: [Like]
+  likesCount: Int
   theme: String
   thumbnail: String
   title: String

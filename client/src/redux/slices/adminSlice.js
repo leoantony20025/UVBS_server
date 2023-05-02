@@ -3,27 +3,32 @@ import { createSlice } from '@reduxjs/toolkit'
 const slice = createSlice({
     name: 'admin',
     initialState: {
-        employees: [],
-        skills: [],
-        categories: [],
-        certificates: []
+        users: [],
+        videos: [],
+        audios: [],
+        products: [],
+        orders: []
+
     },
     reducers: {
-        getEmployees: (state, action) => {
-            state.employees = action.payload;
+        getUsers: (state, action) => {
+            state.users = action.payload;
         },
-        getSkills: (state, action) => {
-            state.skills = action.payload
+        getVideos: (state, action) => {
+            state.videos = action.payload
         },
-        getCategories: (state, action) => {
-            state.categories = action.payload
+        getAudios: (state, action) => {
+            state.audios = action.payload
         },
-        getCertificates: (state, action) => {
-            state.certificates = action.payload
+        getProducts: (state, action) => {
+            state.products = action.payload
+        },
+        getOrders: (state, action) => {
+            state.orders = action.payload
         }
     },
 });
 
-export const { getEmployees, getSkills, getCategories, getCertificates } = slice.actions
+export const { getAudios, getOrders, getProducts, getUsers, getVideos } = slice.actions
 
 export default slice.reducer

@@ -1,16 +1,41 @@
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 
 const GET_ALL_USERS = gql`
   query AllUsers {
     allUsers {
-        name
-        email
-        password
+      id
+      name
+      email
+      cart {
+        id
+        price
+        products {
+          id
+          quantity
+          product {
+            id
+            name
+            description
+            price
+            photo
+          }
+        }
+      }
+      shipping {
+        id
+        line1
+        line2
+        city
+        state
+        country
+        zip
+      }
     }
   }
 `
 
 export const useGetAllUsers = () => {
-    const [getAllUsers, {loading, data, error}] = useLazyQuery(GET_ALL_USERS)
-    return {getAllUsers, loading, data, error}
+    var {loading, data, error} = useQuery(GET_ALL_USERS)
+     data = data?.allUsers
+    return { loading, data, error}
 }

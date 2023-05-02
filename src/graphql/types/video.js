@@ -11,7 +11,8 @@ export const Video = objectType({
       t.string("description");
       t.string("thumbnail");
       t.string("videoUrl");
-      t.int("likes");
+      t.int("likesCount");
+      t.list.field("likes", {type: "Like"});
       t.list.field("comments", {type: "Comment"});
       t.string("theme");
       t.field("createdAt", { type: "DateTime" });
@@ -28,6 +29,11 @@ export const Video = objectType({
             async resolve(_root, args) {
                 return await prisma.video.findMany({
                     include: {
+                        likes: {
+                            include: {
+                                user: true
+                            }
+                        },
                         comments: {
                             include: {
                                 user: true
@@ -43,7 +49,7 @@ export const Video = objectType({
 export const addVideo = extendType({
     type: "Mutation",
     definition(t) {
-        t.field("addVideo", {
+        t.list.field("addVideo", {
             type: "Video",
             args: {
                 title: nonNull(stringArg()),
@@ -63,6 +69,11 @@ export const addVideo = extendType({
 
                 return await prisma.video.findMany({
                     include: {
+                        likes: {
+                            include: {
+                                user: true
+                            }
+                        },
                         comments: {
                             include: {
                                 user: true
@@ -75,22 +86,76 @@ export const addVideo = extendType({
     }
 })
 
-export const addLike = extendType({
+export const updateVideo = extendType({
     type: "Mutation",
     definition(t) {
-        t.field("addLike", {
+        t.list.field("updateVideo", {
             type: "Video",
             args: {
-                videoId: nonNull(stringArg()),
+                id: nonNull(stringArg()),
+                title: nonNull(stringArg()),
+                description: nonNull(stringArg()),
+                thumbnail: nonNull(stringArg()),
+                videoUrl: nonNull(stringArg()),
             },
             async resolve(_root, args) {
-                return await prisma.video.update({
+                await prisma.video.update({
                     where: {
-                        id: args.videoId
+                        id: args.id,
                     },
                     data: {
+                        title: args.title,
+                        description: args.description,
+                        thumbnail: args.thumbnail,
+                        videoUrl: args.videoUrl
+                    }
+                })
+
+                return await prisma.video.findMany({
+                    include: {
                         likes: {
-                            increment: 1
+                            include: {
+                                user: true
+                            }
+                        },
+                        comments: {
+                            include: {
+                                user: true
+                            }
+                        }
+                    }
+                })
+            }
+        })
+    }
+})
+
+export const deleteVideo = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.list.field("deleteVideo", {
+            type: "Video",
+            args: {
+                id: nonNull(stringArg()),
+            },
+            async resolve(_root, args) {
+                await prisma.video.delete({
+                    where: {
+                        id: args.id,
+                    }
+                })
+
+                return await prisma.video.findMany({
+                    include: {
+                        likes: {
+                            include: {
+                                user: true
+                            }
+                        },
+                        comments: {
+                            include: {
+                                user: true
+                            }
                         }
                     }
                 })

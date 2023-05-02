@@ -7,6 +7,8 @@ export const Comment = objectType({
     name: "Comment",
     definition(t) {
       t.string("id");
+      t.string("userId");
+      t.string("videoId");
       t.field("user", {type: "User"});
       t.string("msg");
       t.field("video", {type: "Video"});
@@ -54,6 +56,11 @@ export const addComment = extendType({
                 if (comment) {
                     return await prisma.video.findMany({
                         include: {
+                            likes: {
+                                include: {
+                                    user: true
+                                }
+                            },
                             comments: {
                                 include: {
                                     user: true

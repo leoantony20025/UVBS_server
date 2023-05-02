@@ -12,7 +12,11 @@ export const User = objectType({
       t.string("id");
       t.string("name");
       t.string("email");
+      t.string("phone");
       t.string("password");
+      t.field("cart", {type: "Cart"}),
+      t.list.field("orders", {type: "Order"}),
+      t.field("shipping", {type: "Shipping"}),
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
     },
@@ -24,7 +28,21 @@ export const allUsers = extendType({
         t.list.field("allUsers", {
             type: "User",
             async resolve(_root, args) {
-                return await prisma.user.findMany({})
+                return await prisma.user.findMany({
+                    include: {
+                        cart: {
+                            include: {
+                                products: {
+                                    include: {
+                                        product: true
+                                    }
+                                }
+                            }
+                        },
+                        orders: true,
+                        shipping: true
+                    }
+                })
             }
         })
     }
@@ -39,6 +57,7 @@ export const signup = extendType({
                 email: nonNull(stringArg()),
                 name: nonNull(stringArg()),
                 password: nonNull(stringArg()),
+                phone: nonNull(stringArg()),
             },
             async resolve(_root, args) {
                 const existingUser = await prisma.user.findUnique({
@@ -51,13 +70,42 @@ export const signup = extendType({
                     return new GraphQLError("Email already exists!")
                 }
                 else {
-                    return await prisma.user.create({
+                    
+                    var user = await prisma.user.create({
                         data: {
                             name: args.name,
                             email: args.email,
+                            phone: args.phone,
                             password: args.password
                         }
                     })
+
+                    await prisma.cart.create({
+                        data: {
+                            userId: user?.id,
+                            price: 0
+                        }
+                    })
+
+                    return await prisma.user.findUnique({
+                        where: {
+                            id: user?.id
+                        },
+                        include: {
+                            cart: {
+                                include: {
+                                    products: {
+                                        include: {
+                                            product: true
+                                        }
+                                    }
+                                }
+                            },
+                            orders: true,
+                            shipping: true
+                        }
+                    })
+                    
                 }
                 
             }
@@ -79,6 +127,19 @@ export const login = extendType({
                 const user = await prisma.user.findUniqueOrThrow({
                     where: {
                         email: args.email
+                    },
+                    include: {
+                        cart: {
+                            include: {
+                                products: {
+                                    include: {
+                                        product: true
+                                    }
+                                }
+                            }
+                        },
+                        orders: true,
+                        shipping: true
                     }
                 })
 
@@ -89,6 +150,54 @@ export const login = extendType({
                 if (user?.password === args.password) {
                     return user
                 }
+            }
+        })
+    }
+})
+
+export const updateUser = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("updateUser", {
+            type: "User",
+            args: {
+                id: nonNull(stringArg()),
+                email: nonNull(stringArg()),
+                name: nonNull(stringArg()),
+                password: nonNull(stringArg()),
+                phone: nonNull(stringArg()),
+            },
+            async resolve(_root, args) {
+                var user = await prisma.user.update({
+                    where: {
+                        id: args.id
+                    },
+                    data: {
+                        name: args.name,
+                        email: args.email,
+                        password: args.password,
+                        phone: args.phone
+                    }
+                })
+
+                return await prisma.user.findUnique({
+                    where: {
+                        id: user?.id
+                    },
+                    include: {
+                        cart: {
+                            include: {
+                                products: {
+                                    include: {
+                                        product: true
+                                    }
+                                }
+                            }
+                        },
+                        orders: true,
+                        shipping: true
+                    }
+                })
             }
         })
     }
