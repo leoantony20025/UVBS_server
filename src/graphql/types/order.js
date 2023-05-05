@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { booleanArg, extendType, intArg, nonNull, objectType, stringArg } from "nexus";
-import { mailToOrderPlacement } from "../../../mail";
+import { mailToOrderPlacement } from "../../../mail/index.js";
 
 const prisma = new PrismaClient()
 

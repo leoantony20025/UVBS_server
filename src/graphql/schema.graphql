@@ -91,6 +91,7 @@ type Order {
   city: String
   country: String
   createdAt: DateTime
+  deliveryDate: DateTime
   id: String
   line1: String
   line2: String
