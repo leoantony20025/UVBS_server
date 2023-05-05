@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { booleanArg, extendType, intArg, nonNull, objectType, stringArg } from "nexus";
+import { mailToOrderPlacement } from "../../../mail";
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,7 @@ export const Order = objectType({
       t.string("razorpay_payment_id");
       t.string("razorpay_order_id");
       t.string("razorpay_signature");
+      t.field("deliveryDate", { type: "DateTime" });
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
     },
@@ -58,6 +60,7 @@ export const createCODOrder = extendType({
                 price: nonNull(intArg()),
             },
             async resolve(_root, args) {
+                let deliveryDate = new Date(Date.now() + 5 * 86400000)
                 await prisma.order.create({
                     data: {
                         userId: args.userId,
@@ -71,9 +74,18 @@ export const createCODOrder = extendType({
                         price: args.price,
                         payment_mode: "COD",
                         payment_status: "NP",
-                        status: "PLACED"
+                        status: "PLACED",
+                        deliveryDate
                     }
                 })
+
+                const user = await prisma.user.findUnique({
+                    where: {
+                        id: args.userId
+                    }
+                })
+
+                mailToOrderPlacement(user?.email, user?.name)
 
                 return await prisma.user.findUnique({
                     where: {

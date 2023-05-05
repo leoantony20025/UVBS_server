@@ -13,7 +13,7 @@ datasource db {
 model User {
   id          String        @id @default(uuid())
   email       String        @unique
-  phone       String?          
+  phone       String?
   name        String
   password    String
   createdAt   DateTime      @default(now())
@@ -114,40 +114,39 @@ model CartProduct {
 }
 
 model Shipping {
-  id        String    @id @default(uuid())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String    @unique
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @unique
   line1     String
   line2     String
   city      String
   state     String
   country   String
   zip       Int
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
-  id        String    @id @default(uuid())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String    
-  products  String
-  price     Int       @default(0)
-  payment_mode   String
-  payment_status  String
-  razorpay_temp_order_id      String?
+  id                     String   @id @default(uuid())
+  user                   User     @relation(fields: [userId], references: [id])
+  userId                 String
+  products               String
+  price                  Int      @default(0)
+  payment_mode           String
+  payment_status         String
+  razorpay_temp_order_id String?
   razorpay_payment_id    String?
   razorpay_order_id      String?
   razorpay_signature     String?
-  line1     String
-  line2     String
-  city      String
-  state     String
-  country   String
-  zip       Int
-  status    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  line1                  String
+  line2                  String
+  city                   String
+  state                  String
+  country                String
+  zip                    Int
+  status                 String
+  deliveryDate           DateTime @default(now())
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 }
-
-
