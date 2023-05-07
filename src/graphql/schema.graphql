@@ -72,9 +72,11 @@ type Mutation {
   addVideo(description: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
   createCODOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, state: String!, userId: String!, zip: Int!): User
   createCart(userId: String!): Cart
+  createRPOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, razorpay_order_id: String!, razorpay_payment_id: String!, razorpay_signature: String!, razorpay_temp_order_id: String!, state: String!, userId: String!, zip: Int!): User
   deleteAudio(id: String!): [Audio]
   deleteProduct(id: String!): [Product]
   deleteVideo(id: String!): [Video]
+  generateRPOrderId(price: Int!): RPOrder
   login(email: String!, password: String!): User
   removeAllLikes: [Video]
   removeFromCartProduct(cartProductId: String!, userId: String!): User
@@ -145,6 +147,20 @@ type Query {
   allShipping: [Shipping]
   allUsers: [User]
   allVideos: [Video]
+}
+
+type RPOrder {
+  amount: Int
+  amount_due: Int
+  amount_paid: Int
+  attempts: Int
+  created_at: DateTime
+  currency: String
+  entity: String
+  id: String
+  offer_id: String
+  receipt: String
+  status: String
 }
 
 type Shipping {
