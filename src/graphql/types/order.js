@@ -88,7 +88,7 @@ export const createCODOrder = extendType({
             },
             async resolve(_root, args) {
                 let deliveryDate = new Date(Date.now() + 5 * 86400000)
-                await prisma.order.create({
+                let order = await prisma.order.create({
                     data: {
                         userId: args.userId,
                         line1: args.line1,
@@ -112,7 +112,8 @@ export const createCODOrder = extendType({
                     }
                 })
 
-                mailToOrderPlacement(user?.email, user?.name)
+                mailToOrderPlacement(user?.email, user?.name, order)
+
 
                 return await prisma.user.findUnique({
                     where: {
@@ -192,7 +193,7 @@ export const createRPOrder = extendType({
                 const generated_signature = hmac.digest('hex');
 
                 if (generated_signature == args.razorpay_signature) {
-                    await prisma.order.create({
+                    let order = await prisma.order.create({
                         data: {
                             userId: args.userId,
                             line1: args.line1,
@@ -222,7 +223,7 @@ export const createRPOrder = extendType({
 
                     console.log("");
     
-                    mailToOrderPlacement(user?.email, user?.name)
+                    mailToOrderPlacement(user?.email, user?.name, order)
     
                     return await prisma.user.findUnique({
                         where: {
