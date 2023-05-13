@@ -4,6 +4,7 @@ import { mailToOrderPlacement } from "../../../mail/index.js";
 import Razorpay from "razorpay";
 import { uuid } from "uuidv4";
 import crypto from 'crypto'
+import Stripe from "stripe";
 
 const prisma = new PrismaClient()
 
@@ -13,6 +14,8 @@ const instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret,
   });
+
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY)
 
 export const Order = objectType({
     name: "Order",
@@ -54,6 +57,14 @@ export const Order = objectType({
       t.string("status");
       t.int("attempts");
       t.field("created_at", { type: "DateTime" });
+    },
+  });
+
+  export const StripePI = objectType({
+    name: "StripePI",
+    definition(t) {
+      t.string("id");
+      t.string("client_secret");
     },
   });
 
@@ -160,6 +171,33 @@ export const generateRPOrderId = extendType({
     }
 })
 
+export const generateStripePaymentIndent = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("generateStripePaymentIndent", {
+            type: "StripePI",
+            args: {
+                price: nonNull(intArg()),
+            },
+            async resolve(_root, args) {
+                console.log("START");
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: args.price * 100,
+                    currency: 'inr',
+                    automatic_payment_methods: {
+                        enabled: true,
+                      },
+                  });
+
+                  console.log(paymentIntent);
+
+                  return paymentIntent
+                
+            }
+        })
+    }
+})
+
 export const createRPOrder = extendType({
     type: "Mutation",
     definition(t) {
@@ -184,15 +222,15 @@ export const createRPOrder = extendType({
                 let deliveryDate = new Date(Date.now() + 5 * 86400000)
 
                 // generated_signature = hmac_sha256(order_id + "|" + razorpay_payment_id, secret);
-                let hmac = crypto.createHmac('sha256', key_secret); 
+                // let hmac = crypto.createHmac('sha256', key_secret); 
   
                 // Passing the data to be hashed
-                hmac.update(args.razorpay_temp_order_id + "|" + args.razorpay_payment_id);
+                // hmac.update(args.razorpay_temp_order_id + "|" + args.razorpay_payment_id);
                 
                 // Creating the hmac in the required format
-                const generated_signature = hmac.digest('hex');
+                // const generated_signature = hmac.digest('hex');
 
-                if (generated_signature == args.razorpay_signature) {
+                // if (generated_signature == args.razorpay_signature) {
                     let order = await prisma.order.create({
                         data: {
                             userId: args.userId,
@@ -204,7 +242,7 @@ export const createRPOrder = extendType({
                             zip: args.zip,
                             products: args.products,
                             price: args.price,
-                            payment_mode: "RP",
+                            payment_mode: "STRIPE",
                             payment_status: "P",
                             status: "PLACED",
                             razorpay_temp_order_id: args.razorpay_temp_order_id,
@@ -243,12 +281,14 @@ export const createRPOrder = extendType({
                             shipping: true
                         }
                     })
-                } else {
-                    console.log("SIGNATURE FAILED");
-                }
+                // } else {
+                //     console.log("SIGNATURE FAILED");
+                // }
 
                 
             }
         })
     }
 })
+
+

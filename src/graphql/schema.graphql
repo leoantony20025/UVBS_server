@@ -77,6 +77,7 @@ type Mutation {
   deleteProduct(id: String!): [Product]
   deleteVideo(id: String!): [Video]
   generateRPOrderId(price: Int!): RPOrder
+  generateStripePaymentIndent(price: Int!): StripePI
   login(email: String!, password: String!): User
   removeAllLikes: [Video]
   removeFromCartProduct(cartProductId: String!, userId: String!): User
@@ -174,6 +175,11 @@ type Shipping {
   updatedAt: DateTime
   user: User
   zip: Int
+}
+
+type StripePI {
+  client_secret: String
+  id: String
 }
 
 type User {
