@@ -17,6 +17,7 @@ export const User = objectType({
       t.field("cart", {type: "Cart"}),
       t.list.field("orders", {type: "Order"}),
       t.field("shipping", {type: "Shipping"}),
+      t.boolean("isActive");
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
     },
@@ -143,6 +144,10 @@ export const login = extendType({
                     }
                 })
 
+                if (user?.isActive === false) {
+                    return new GraphQLError("No user found!")
+                }
+
                 if (user?.password !== args.password) {
                     return new GraphQLError("Invalid credentials!")
                 }
@@ -198,6 +203,32 @@ export const updateUser = extendType({
                         shipping: true
                     }
                 })
+            }
+        })
+    }
+})
+
+
+export const deleteUser = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("deleteUser", {
+            type: "User",
+            args: {
+                id: nonNull(stringArg()),
+            },
+            async resolve(_root, args) {
+                var user = await prisma.user.update({
+                    where: {
+                        id: args.id
+                    },
+                    data: {
+                        isActive: false
+                    }
+                })
+
+
+                return user
             }
         })
     }

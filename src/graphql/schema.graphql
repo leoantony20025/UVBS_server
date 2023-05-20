@@ -75,6 +75,7 @@ type Mutation {
   createRPOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, razorpay_order_id: String!, razorpay_payment_id: String!, razorpay_signature: String!, razorpay_temp_order_id: String!, state: String!, userId: String!, zip: Int!): User
   deleteAudio(id: String!): [Audio]
   deleteProduct(id: String!): [Product]
+  deleteUser(id: String!): User
   deleteVideo(id: String!): [Video]
   generateRPOrderId(price: Int!): RPOrder
   generateStripePaymentIndent(price: Int!): StripePI
@@ -187,6 +188,7 @@ type User {
   createdAt: DateTime
   email: String
   id: String
+  isActive: Boolean
   name: String
   orders: [Order]
   password: String

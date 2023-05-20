@@ -25,6 +25,7 @@ model User {
   cartProduct CartProduct[]
   //orderProduct OrderProduct[]
   shipping    Shipping?
+  isActive    Boolean      @default(true)
 }
 
 model Audio {
