@@ -67,6 +67,7 @@ type Mutation {
   addAudio(audioUrl: String!, description: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
   addComment(msg: String!, userId: String!, videoId: String!): [Video]
   addLike(userId: String!, videoId: String!): [Video]
+  addPreviousVideo(thumbnail: String!, title: String!, url: String!, year: Int!): [PreviousVideo]
   addProduct(description: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
   addToCartProduct(cartId: String!, productId: String!, quantity: Int!, userId: String!): User
   addVideo(description: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
@@ -74,6 +75,7 @@ type Mutation {
   createCart(userId: String!): Cart
   createRPOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, razorpay_order_id: String!, razorpay_payment_id: String!, razorpay_signature: String!, razorpay_temp_order_id: String!, state: String!, userId: String!, zip: Int!): User
   deleteAudio(id: String!): [Audio]
+  deletePreviousVideo(id: String!): [PreviousVideo]
   deleteProduct(id: String!): [Product]
   deleteUser(id: String!): User
   deleteVideo(id: String!): [Video]
@@ -85,6 +87,7 @@ type Mutation {
   removeLike(userId: String!, videoId: String!): [Video]
   signup(email: String!, name: String!, password: String!, phone: String!): User
   updateAudio(audioUrl: String!, description: String!, id: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
+  updatePreviousVideo(id: String!, thumbnail: String!, title: String!, url: String!, year: Int!): [PreviousVideo]
   updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
   updateUser(email: String!, id: String!, name: String!, password: String!, phone: String!): User
   updateUserSubscription(id: String!, isSubscribed: Boolean!): User
@@ -128,6 +131,16 @@ type OrderProduct {
   userId: String
 }
 
+type PreviousVideo {
+  createdAt: DateTime
+  id: String
+  thumbnail: String
+  title: String
+  updatedAt: DateTime
+  url: String
+  year: Int
+}
+
 type Product {
   createdAt: DateTime
   description: String
@@ -146,6 +159,7 @@ type Query {
   allComments: [Comment]
   allLikes: [Like]
   allOrders: [Order]
+  allPreviousVideos: [PreviousVideo]
   allProducts: [Product]
   allShipping: [Shipping]
   allUsers: [User]

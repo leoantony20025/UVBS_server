@@ -1,6 +1,7 @@
 export * from "./user.js";
 export * from "./audio.js";
 export * from "./video.js";
+export * from "./previousVideo.js";
 export * from "./comment.js";
 export * from "./like.js";
 export * from "./product.js";
