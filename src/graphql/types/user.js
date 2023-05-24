@@ -69,7 +69,31 @@ export const signup = extendType({
                 })
 
                 if (existingUser) {
-                    return new GraphQLError("Email already exists!")
+                    if (existingUser?.isActive === false) {
+                        return await prisma.user.update({
+                            where: {
+                                id: existingUser?.id
+                            },
+                            data: {
+                                isActive: true,
+                            },
+                            include: {
+                                cart: {
+                                    include: {
+                                        products: {
+                                            include: {
+                                                product: true
+                                            }
+                                        }
+                                    }
+                                },
+                                orders: true,
+                                shipping: true
+                            }
+                        })
+
+                    }
+                    else return new GraphQLError("Email already exists!")
                 }
                 else {
                     
