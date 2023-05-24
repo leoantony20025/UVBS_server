@@ -11,21 +11,22 @@ datasource db {
 }
 
 model User {
-  id          String        @id @default(uuid())
-  email       String        @unique
-  phone       String?
-  name        String
-  password    String
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  like        Like[]
-  comment     Comment[]
-  cart        Cart?
-  orders      Order[]
-  cartProduct CartProduct[]
+  id           String        @id @default(uuid())
+  email        String        @unique
+  phone        String?
+  name         String
+  password     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  like         Like[]
+  comment      Comment[]
+  cart         Cart?
+  orders       Order[]
+  cartProduct  CartProduct[]
   //orderProduct OrderProduct[]
-  shipping    Shipping?
-  isActive    Boolean      @default(true)
+  shipping     Shipping?
+  isActive     Boolean       @default(true)
+  isSubscribed Boolean       @default(false)
 }
 
 model Audio {

@@ -1,4 +1,4 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { booleanArg, extendType, nonNull, objectType, stringArg } from "nexus";
 import { PrismaClient } from "@prisma/client";
 import { GraphQLError } from "graphql";
 
@@ -18,6 +18,7 @@ export const User = objectType({
       t.list.field("orders", {type: "Order"}),
       t.field("shipping", {type: "Shipping"}),
       t.boolean("isActive");
+      t.boolean("isSubscribed");
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
     },
@@ -208,6 +209,48 @@ export const updateUser = extendType({
     }
 })
 
+export const updateUserSubscription = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("updateUserSubscription", {
+            type: "User",
+            args: {
+                id: nonNull(stringArg()),
+                isSubscribed: nonNull(booleanArg()),
+            },
+            async resolve(_root, args) {
+                var user = await prisma.user.update({
+                    where: {
+                        id: args.id
+                    },
+                    data: {
+                        isSubscribed: args.isSubscribed,
+                    }
+                })
+
+                return await prisma.user.findUnique({
+                    where: {
+                        id: user?.id
+                    },
+                    include: {
+                        cart: {
+                            include: {
+                                products: {
+                                    include: {
+                                        product: true
+                                    }
+                                }
+                            }
+                        },
+                        orders: true,
+                        shipping: true
+                    }
+                })
+            }
+        })
+    }
+})
+
 
 export const deleteUser = extendType({
     type: "Mutation",
@@ -226,8 +269,6 @@ export const deleteUser = extendType({
                         isActive: false
                     }
                 })
-
-
                 return user
             }
         })
