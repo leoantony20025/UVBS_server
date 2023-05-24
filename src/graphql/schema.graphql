@@ -87,6 +87,7 @@ type Mutation {
   updateAudio(audioUrl: String!, description: String!, id: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
   updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
   updateUser(email: String!, id: String!, name: String!, password: String!, phone: String!): User
+  updateUserSubscription(id: String!, isSubscribed: Boolean!): User
   updateVideo(description: String!, id: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
   upsertShipping(city: String!, country: String!, line1: String!, line2: String!, state: String!, userId: String!, zip: Int!): User
 }
@@ -189,6 +190,7 @@ type User {
   email: String
   id: String
   isActive: Boolean
+  isSubscribed: Boolean
   name: String
   orders: [Order]
   password: String
