@@ -10,4 +10,5 @@ export * from "./cart.js";
 export * from "./order.js";
 export * from "./orderProduct.js";
 export * from "./shipping.js";
+export * from "./asset.js";
 

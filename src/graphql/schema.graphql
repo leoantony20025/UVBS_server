@@ -2,6 +2,15 @@
 ### Do not make changes to this file directly
 
 
+type Asset {
+  createdAt: DateTime
+  id: String
+  themeDescription: String
+  themePhoto: String
+  themeTitle: String
+  updatedAt: DateTime
+}
+
 type Audio {
   audioUrl: String
   createdAt: DateTime
@@ -64,6 +73,7 @@ type Like {
 }
 
 type Mutation {
+  addAsset(themeDescription: String!, themePhoto: String!, themeTitle: String!): [Asset]
   addAudio(audioUrl: String!, description: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
   addComment(msg: String!, userId: String!, videoId: String!): [Video]
   addLike(userId: String!, videoId: String!): [Video]
@@ -74,6 +84,7 @@ type Mutation {
   createCODOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, state: String!, userId: String!, zip: Int!): User
   createCart(userId: String!): Cart
   createRPOrder(city: String!, country: String!, line1: String!, line2: String!, price: Int!, products: String!, razorpay_order_id: String!, razorpay_payment_id: String!, razorpay_signature: String!, razorpay_temp_order_id: String!, state: String!, userId: String!, zip: Int!): User
+  deleteAsset(id: String!): [Asset]
   deleteAudio(id: String!): [Audio]
   deletePreviousVideo(id: String!): [PreviousVideo]
   deleteProduct(id: String!): [Product]
@@ -86,6 +97,7 @@ type Mutation {
   removeFromCartProduct(cartProductId: String!, userId: String!): User
   removeLike(userId: String!, videoId: String!): [Video]
   signup(email: String!, name: String!, password: String!, phone: String!): User
+  updateAsset(themeDescription: String!, themePhoto: String!, themeTitle: String!): [Asset]
   updateAudio(audioUrl: String!, description: String!, id: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
   updatePreviousVideo(id: String!, thumbnail: String!, title: String!, url: String!, year: Int!): [PreviousVideo]
   updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
@@ -153,6 +165,7 @@ type Product {
 }
 
 type Query {
+  allAssets: [Asset]
   allAudios: [Audio]
   allCartProducts: [CartProduct]
   allCarts: [Cart]
