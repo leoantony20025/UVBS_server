@@ -181,18 +181,31 @@ export const generateStripePaymentIndent = extendType({
             },
             async resolve(_root, args) {
                 console.log("START");
-                const paymentIntent = await stripe.paymentIntents.create({
-                    amount: args.price * 100,
-                    currency: 'inr',
-                    automatic_payment_methods: {
-                        enabled: true,
-                      },
-                  });
-
-                  console.log(paymentIntent);
-
-                  return paymentIntent
-                
+                try {
+                    const paymentIntent = await stripe.paymentIntents.create({
+                        amount: args.price * 100,
+                        currency: 'inr',
+                        automatic_payment_methods: {
+                            enabled: true,
+                          },
+                      });
+    
+                      console.log("pi");
+    
+                      return paymentIntent
+                } catch (error) {
+                    const paymentIntent = await stripe.paymentIntents.create({
+                        amount: args.price * 100,
+                        currency: 'inr',
+                        // automatic_payment_methods: {
+                        //     enabled: true,
+                        //   },
+                      });
+    
+                      console.log("paymentIntent");
+    
+                      return paymentIntent
+                }
             }
         })
     }

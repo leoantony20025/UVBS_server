@@ -21,6 +21,7 @@ export const User = objectType({
       t.boolean("isSubscribed");
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
+      t.string("pid");
     },
   });
 
@@ -241,6 +242,7 @@ export const updateUserSubscription = extendType({
             args: {
                 id: nonNull(stringArg()),
                 isSubscribed: nonNull(booleanArg()),
+                pid: nonNull(stringArg()),
             },
             async resolve(_root, args) {
                 var user = await prisma.user.update({
@@ -249,6 +251,7 @@ export const updateUserSubscription = extendType({
                     },
                     data: {
                         isSubscribed: args.isSubscribed,
+                        pid: args.pid
                     }
                 })
 

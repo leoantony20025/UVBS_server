@@ -102,7 +102,7 @@ type Mutation {
   updatePreviousVideo(id: String!, thumbnail: String!, title: String!, url: String!, year: Int!): [PreviousVideo]
   updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
   updateUser(email: String!, id: String!, name: String!, password: String!, phone: String!): User
-  updateUserSubscription(id: String!, isSubscribed: Boolean!): User
+  updateUserSubscription(id: String!, isSubscribed: Boolean!, pid: String!): User
   updateVideo(description: String!, id: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
   upsertShipping(city: String!, country: String!, line1: String!, line2: String!, state: String!, userId: String!, zip: Int!): User
 }
@@ -222,6 +222,7 @@ type User {
   orders: [Order]
   password: String
   phone: String
+  pid: String
   shipping: Shipping
   updatedAt: DateTime
 }
