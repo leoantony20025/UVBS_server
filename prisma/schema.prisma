@@ -18,6 +18,7 @@ model User {
   isActive     Boolean       @default(true)
   isSubscribed Boolean       @default(false)
   pid          String?
+  isPaid       Boolean       @default(false)
   cart         Cart?
   cartProduct  CartProduct[]
   comment      Comment[]
@@ -164,6 +165,8 @@ model Asset {
   themeTitle       String
   themeDescription String
   themePhoto       String
+  isPaymentOnline  Boolean  @default(false)
+  upi              String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

@@ -5,10 +5,12 @@
 type Asset {
   createdAt: DateTime
   id: String
+  isPaymentOnline: Boolean
   themeDescription: String
   themePhoto: String
   themeTitle: String
   updatedAt: DateTime
+  upi: String
 }
 
 type Audio {
@@ -97,11 +99,14 @@ type Mutation {
   removeFromCartProduct(cartProductId: String!, userId: String!): User
   removeLike(userId: String!, videoId: String!): [Video]
   signup(email: String!, name: String!, password: String!, phone: String!): User
-  updateAsset(themeDescription: String!, themePhoto: String!, themeTitle: String!): [Asset]
+  updateAsset(id: String!, themeDescription: String!, themePhoto: String!, themeTitle: String!): [Asset]
   updateAudio(audioUrl: String!, description: String!, id: String!, language: String!, song: Boolean!, thumbnail: String!, title: String!): [Audio]
+  updateIsPaymentOnline(id: String!, isPaymentOnline: String!): [Asset]
   updatePreviousVideo(id: String!, thumbnail: String!, title: String!, url: String!, year: Int!): [PreviousVideo]
   updateProduct(description: String!, id: String!, name: String!, photo: String!, price: Int!, stock: Int!): [Product]
+  updateUPI(id: String!, upi: String!): [Asset]
   updateUser(email: String!, id: String!, name: String!, password: String!, phone: String!): User
+  updateUserPaymentConfirmation(id: String!, isPaid: Boolean!): User
   updateUserSubscription(id: String!, isSubscribed: Boolean!, pid: String!): User
   updateVideo(description: String!, id: String!, thumbnail: String!, title: String!, videoUrl: String!): [Video]
   upsertShipping(city: String!, country: String!, line1: String!, line2: String!, state: String!, userId: String!, zip: Int!): User
@@ -217,6 +222,7 @@ type User {
   email: String
   id: String
   isActive: Boolean
+  isPaid: Boolean
   isSubscribed: Boolean
   name: String
   orders: [Order]

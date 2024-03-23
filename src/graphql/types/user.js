@@ -19,6 +19,7 @@ export const User = objectType({
       t.field("shipping", {type: "Shipping"}),
       t.boolean("isActive");
       t.boolean("isSubscribed");
+      t.boolean("isPaid");
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
       t.string("pid");
@@ -252,6 +253,48 @@ export const updateUserSubscription = extendType({
                     data: {
                         isSubscribed: args.isSubscribed,
                         pid: args.pid
+                    }
+                })
+
+                return await prisma.user.findUnique({
+                    where: {
+                        id: user?.id
+                    },
+                    include: {
+                        cart: {
+                            include: {
+                                products: {
+                                    include: {
+                                        product: true
+                                    }
+                                }
+                            }
+                        },
+                        orders: true,
+                        shipping: true
+                    }
+                })
+            }
+        })
+    }
+})
+
+export const updateUserPaymentConfirmation = extendType({
+    type: "Mutation",
+    definition(t) {
+        t.field("updateUserPaymentConfirmation", {
+            type: "User",
+            args: {
+                id: nonNull(stringArg()),
+                isPaid: nonNull(booleanArg()),
+            },
+            async resolve(_root, args) {
+                var user = await prisma.user.update({
+                    where: {
+                        id: args.id
+                    },
+                    data: {
+                        isPaid: args.isPaid,
                     }
                 })
 
