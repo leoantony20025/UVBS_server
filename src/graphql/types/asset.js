@@ -12,6 +12,8 @@ export const Asset = objectType({
       t.string("themePhoto");
       t.boolean("isPaymentOnline");
       t.string("upi");
+      t.string("termsAndConditions");
+      t.string("privacyPolicy");
       t.field("createdAt", { type: "DateTime" });
       t.field("updatedAt", { type: "DateTime" });
     },
@@ -65,6 +67,10 @@ export const updateAsset = extendType({
                 themeTitle: nonNull(stringArg()),
                 themeDescription: nonNull(stringArg()),
                 themePhoto: nonNull(stringArg()),
+                isPaymentOnline: nonNull(stringArg()),
+                upi: nonNull(stringArg()),
+                termsAndConditions: nonNull(stringArg()),
+                privacyPolicy: nonNull(stringArg())
             },
             async resolve(_root, args) {
                 await prisma.asset.update({
@@ -74,57 +80,11 @@ export const updateAsset = extendType({
                     data: {
                         themeTitle: args.themeTitle,
                         themeDescription: args.themeDescription,
-                        themePhoto: args.themePhoto
-                    }
-                })
-
-                return await prisma.asset.findMany({})
-            }
-        })
-    }
-})
-
-export const updateIsPaymentOnline = extendType({
-    type: "Mutation",
-    definition(t) {
-        t.list.field("updateIsPaymentOnline", {
-            type: "Asset",
-            args: {
-                id: nonNull(stringArg()),
-                isPaymentOnline: nonNull(stringArg()),
-            },
-            async resolve(_root, args) {
-                await prisma.asset.update({
-                    where: {
-                        id: args.id,
-                    },
-                    data: {
+                        themePhoto: args.themePhoto,
                         isPaymentOnline: args.isPaymentOnline,
-                    }
-                })
-
-                return await prisma.asset.findMany({})
-            }
-        })
-    }
-})
-
-export const updateUPI = extendType({
-    type: "Mutation",
-    definition(t) {
-        t.list.field("updateUPI", {
-            type: "Asset",
-            args: {
-                id: nonNull(stringArg()),
-                upi: nonNull(stringArg()),
-            },
-            async resolve(_root, args) {
-                await prisma.asset.update({
-                    where: {
-                        id: args.id,
-                    },
-                    data: {
                         upi: args.upi,
+                        termsAndConditions: args.termsAndConditions,
+                        privacyPolicy: args.privacyPolicy
                     }
                 })
 

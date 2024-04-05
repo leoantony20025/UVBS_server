@@ -161,12 +161,14 @@ model PreviousVideo {
 }
 
 model Asset {
-  id               String   @id @default(uuid())
-  themeTitle       String
-  themeDescription String
-  themePhoto       String
-  isPaymentOnline  Boolean  @default(false)
-  upi              String?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id                 String   @id @default(uuid())
+  themeTitle         String
+  themeDescription   String
+  themePhoto         String
+  isPaymentOnline    Boolean  @default(false)
+  upi                String?
+  termsAndConditions String?
+  privacyPolicy      String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }
