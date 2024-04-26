@@ -21,6 +21,7 @@ type Audio {
   description: String
   id: String
   language: String
+  sno: Int
   song: Boolean
   thumbnail: String
   title: String
@@ -240,6 +241,7 @@ type Video {
   id: String
   likes: [Like]
   likesCount: Int
+  sno: Int
   theme: String
   thumbnail: String
   title: String

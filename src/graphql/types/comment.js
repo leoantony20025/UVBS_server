@@ -55,6 +55,9 @@ export const addComment = extendType({
 
                 if (comment) {
                     return await prisma.video.findMany({
+                        orderBy: {
+                            sno: "asc"
+                        },
                         include: {
                             likes: {
                                 include: {
@@ -62,6 +65,9 @@ export const addComment = extendType({
                                 }
                             },
                             comments: {
+                                orderBy: {
+                                    createdAt: "desc"
+                                },
                                 include: {
                                     user: true
                                 }

@@ -23,7 +23,11 @@ export const PreviousVideo = objectType({
         t.list.field("allPreviousVideos", {
             type: "PreviousVideo",
             async resolve(_root, args) {
-                return await prisma.previousVideo.findMany()
+                return await prisma.previousVideo.findMany({
+                    orderBy: {
+                        year: "desc"
+                    }
+                })
             }
         })
     }
@@ -50,7 +54,11 @@ export const addPreviousVideo = extendType({
                     }
                 })
 
-                return await prisma.previousVideo.findMany()
+                return await prisma.previousVideo.findMany({
+                    orderBy: {
+                        year: "desc"
+                    }
+                })
             }
         })
     }
@@ -81,7 +89,11 @@ export const updatePreviousVideo = extendType({
                     }
                 })
 
-                return await prisma.previousVideo.findMany()
+                return await prisma.previousVideo.findMany({
+                    orderBy: {
+                        year: "desc"
+                    }
+                })
             }
         })
     }
@@ -102,7 +114,11 @@ export const deletePreviousVideo = extendType({
                     }
                 })
 
-                return await prisma.previousVideo.findMany()
+                return await prisma.previousVideo.findMany({
+                    orderBy: {
+                        year: "desc"
+                    }
+                })
             }
         })
     }

@@ -255,7 +255,7 @@ export const createRPOrder = extendType({
                             zip: args.zip,
                             products: args.products,
                             price: args.price,
-                            payment_mode: "STRIPE",
+                            payment_mode: "ONLINE",
                             payment_status: "P",
                             status: "PLACED",
                             razorpay_temp_order_id: args.razorpay_temp_order_id,

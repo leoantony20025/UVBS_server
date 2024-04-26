@@ -7,6 +7,7 @@ export const Video = objectType({
     name: "Video",
     definition(t) {
       t.string("id");
+      t.int("sno");
       t.string("title");
       t.string("description");
       t.string("thumbnail");
@@ -28,6 +29,9 @@ export const Video = objectType({
             type: "Video",
             async resolve(_root, args) {
                 return await prisma.video.findMany({
+                    orderBy: {
+                        sno: "asc"
+                    },
                     include: {
                         likes: {
                             include: {
@@ -35,6 +39,9 @@ export const Video = objectType({
                             }
                         },
                         comments: {
+                            orderBy: {
+                                createdAt: "desc"
+                            },
                             include: {
                                 user: true
                             }
@@ -68,6 +75,9 @@ export const addVideo = extendType({
                 })
 
                 return await prisma.video.findMany({
+                    orderBy: {
+                        sno: "asc"
+                    },
                     include: {
                         likes: {
                             include: {
@@ -75,6 +85,9 @@ export const addVideo = extendType({
                             }
                         },
                         comments: {
+                            orderBy: {
+                                createdAt: "desc"
+                            },
                             include: {
                                 user: true
                             }
@@ -112,6 +125,9 @@ export const updateVideo = extendType({
                 })
 
                 return await prisma.video.findMany({
+                    orderBy: {
+                        sno: "asc"
+                    },
                     include: {
                         likes: {
                             include: {
@@ -119,6 +135,9 @@ export const updateVideo = extendType({
                             }
                         },
                         comments: {
+                            orderBy: {
+                                createdAt: "desc"
+                            },
                             include: {
                                 user: true
                             }
@@ -146,6 +165,9 @@ export const deleteVideo = extendType({
                 })
 
                 return await prisma.video.findMany({
+                    orderBy: {
+                        sno: "asc"
+                    },
                     include: {
                         likes: {
                             include: {
@@ -153,6 +175,9 @@ export const deleteVideo = extendType({
                             }
                         },
                         comments: {
+                            orderBy: {
+                                createdAt: "desc"
+                            },
                             include: {
                                 user: true
                             }

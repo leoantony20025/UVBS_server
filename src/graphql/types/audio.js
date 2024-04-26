@@ -7,6 +7,7 @@ export const Audio = objectType({
     name: "Audio",
     definition(t) {
       t.string("id");
+      t.int("sno");
       t.string("title");
       t.string("description");
       t.string("thumbnail");
@@ -25,7 +26,11 @@ export const Audio = objectType({
         t.list.field("allAudios", {
             type: "Audio",
             async resolve(_root, args) {
-                return await prisma.audio.findMany()
+                return await prisma.audio.findMany({
+                    orderBy: {
+                        sno: "asc"
+                    }
+                })
             }
         })
     }

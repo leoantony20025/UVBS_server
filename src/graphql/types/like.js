@@ -53,6 +53,9 @@ export const addLike = extendType({
     
                 if (isLiked) {
                     return await prisma.video.findMany({
+                        orderBy: {
+                            sno: "asc"
+                        },
                         include: {
                             likes: {
                                 include: {
@@ -60,6 +63,9 @@ export const addLike = extendType({
                                 }
                             },
                             comments: {
+                                orderBy: {
+                                    createdAt: "desc"
+                                },
                                 include: {
                                     user: true
                                 }
@@ -93,6 +99,9 @@ export const removeLike = extendType({
     
                 if (isLikedRemoved) {
                     return await prisma.video.findMany({
+                        orderBy: {
+                            sno: "asc"
+                        },
                         include: {
                             likes: {
                                 include: {
@@ -100,6 +109,9 @@ export const removeLike = extendType({
                                 }
                             },
                             comments: {
+                                orderBy: {
+                                    createdAt: "desc"
+                                },
                                 include: {
                                     user: true
                                 }
@@ -123,6 +135,9 @@ export const removeAllLikes = extendType({
     
                 if (isLikedRemoved) {
                     return await prisma.video.findMany({
+                        orderBy: {
+                            sno: "asc"
+                        },
                         include: {
                             likes: {
                                 include: {
@@ -130,6 +145,9 @@ export const removeAllLikes = extendType({
                                 }
                             },
                             comments: {
+                                orderBy: {
+                                    createdAt: "desc"
+                                },
                                 include: {
                                     user: true
                                 }
